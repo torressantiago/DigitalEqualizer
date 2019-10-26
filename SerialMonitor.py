@@ -29,14 +29,11 @@ print(ser.name)
 
 
 while True:
-    #while (ser.inWaiting == 0):
-       # pass # while there is no data incoming, do nothing
-	
 	ResString = str(ser.readline().decode().strip('\r'))#Capture serial output as a decoded string
 	ResNum = float(ResString)
 	print(ResString)
 	Res.append(ResNum)
 	drawnow(makeFig)
-	i = i + 1
+#	i = i + 1
 #	if(i > 15):                          
 #		Res.pop(0) # This allows to just see the last 15 data points
