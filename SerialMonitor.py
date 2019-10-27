@@ -26,9 +26,9 @@ def makeFig():
 	plt.title('Serial plotter') #Plot the title
 	plt.grid(True) #Turn the grid on
 	plt.ylabel('Decoded value') #Set ylabels
-	plt.plot(ResAvg, 'ro', label='Received value') #plot the received value
+	plt.plot(ResAvg, 'ro-', label='Received value') #plot the received value
 	plt.legend(loc='upper left') #plot the legend
-	plt.draw()
+	plt.show(block = True)
 
 
 ###################### Program flow ###########################################
@@ -48,6 +48,7 @@ for BigCounter in range(3):
         ResNumL[row][column] = np.asarray(ResNum)
         
     ResAvg = np.mean(ResNumL,axis = 1)
-    drawnow(makeFig)
+    
+drawnow(makeFig) # plot average after window
         
 ser = None # Closes port
