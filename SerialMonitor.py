@@ -7,6 +7,7 @@ import numpy as np
 from scipy import signal
 from math import pi
 from decimal import Decimal
+import scipy.fftpack
 
 ###################### Variable declarations ##################################
 Res = []
@@ -28,14 +29,14 @@ inputvar = '0'
 
 Window = 0
 Iterations = 0
-Order = 60
+Order = 4
 ###################### Function definitions ###################################
 def makeFig():
 	plt.ylim(-1,1) #Set y min and max values
 	plt.title('Serial plotter') #Plot the title
 	plt.grid(True) #Turn the grid on
 	plt.ylabel('Decoded value') #Set ylabels
-	plt.plot(ResAvg, 'ro-', label='Received value') #plot the received value
+	plt.plot(xf,   ResAvg, 'ro-', label='Received value') #plot the received value
 	plt.legend(loc='upper left') #plot the legend
 	plt.show(block = False)
 
@@ -81,16 +82,17 @@ while state >= 0:
         x = inputvar.replace(" ","")
         y = x.replace("[","")
         z = y.replace("]","")
-        q = z + 'p';
+        s = z.replace("'","")
+        q = s + 'p';
         ser.write(z.encode())
         ser = None # Closes port   
         print('Returning to Main Menu...')
         state = 0
         
     elif state == 2:
-        print("Input number of iterations and window size")
+        print("Input window size")
         Iterations = int(input())
-        Window = int(input())
+        Window = 1
         ResNumL = np.ones((Window,Iterations))
         for BigCounter in range(Iterations):
             print(BigCounter)
@@ -104,7 +106,8 @@ while state >= 0:
                 Res.append(ResNum)
                 ResNumL[row][column] = np.asarray(ResNum)
                 
-            ResAvg = np.mean(ResNumL,axis = 1)
+            ResAvg = scipy.fftpack.fft(ResNumL)
+            xf = np.linspace(0.0, 48000/(2.0), 1024/2)
             
         drawnow(makeFig) # plot average after window
                 
